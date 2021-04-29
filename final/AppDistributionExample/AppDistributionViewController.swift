@@ -89,10 +89,6 @@ class AppDistributionViewController: UIViewController {
     checkForUpdate()
   }
 
-  private func isTesterSignedIn() -> Bool {
-    return AppDistribution.appDistribution().isTesterSignedIn
-  }
-
   @objc func signInOutButtonClicked() {
     if isTesterSignedIn() {
       AppDistribution.appDistribution().signOutTester()
@@ -117,6 +113,10 @@ class AppDistributionViewController: UIViewController {
         }
       })
     }
+  }
+
+  private func isTesterSignedIn() -> Bool {
+    return AppDistribution.appDistribution().isTesterSignedIn
   }
 
 
