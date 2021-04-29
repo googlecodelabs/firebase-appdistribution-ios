@@ -57,10 +57,6 @@ class AppDistributionViewController: UIViewController {
   }
 
   // MARK: - Firebase 🔥
-  @objc func checkForUpdateButtonClicked() {
-    checkForUpdate()
-  }
-
   private func checkForUpdate() {
     AppDistribution.appDistribution().checkForUpdate(completion: { [self] release, error in
       var uiAlert: UIAlertController
@@ -87,6 +83,10 @@ class AppDistributionViewController: UIViewController {
       }
       self.present(uiAlert, animated: true, completion: nil)
     })
+  }
+
+  @objc func checkForUpdateButtonClicked() {
+    checkForUpdate()
   }
 
   private func isTesterSignedIn() -> Bool {
