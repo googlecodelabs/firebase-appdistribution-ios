@@ -6,8 +6,7 @@ target 'AppDistributionExample' do
   use_frameworks!
 
   # Pods for AppDistributionExample
-  pod 'Firebase/Analytics'
-  pod 'Firebase/AppDistribution'
+
 
   target 'AppDistributionExampleTests' do
     inherit! :search_paths

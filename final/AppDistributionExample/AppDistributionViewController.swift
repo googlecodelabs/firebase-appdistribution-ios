@@ -52,111 +52,96 @@ class AppDistributionViewController: UIViewController {
     view.addSubview(signedInStatus!)
   }
 
-  // MARK: - Firebase 🔥
   override func viewDidAppear(_ animated: Bool) {
-    AppDistribution.appDistribution().checkForUpdate { release, error in
-      guard let release = release else {
-        print("No release found")
-        return
-      }
-
-      let title = "New Version Available"
-      let message = "Version \(release.displayVersion)(\(release.buildVersion)) is available."
-      let uialert = UIAlertController(title: title,message: message, preferredStyle: .alert)
-
-      uialert.addAction(UIAlertAction(title: "Update", style: UIAlertAction.Style.default) {
-        alert in
-        UIApplication.shared.open(release.downloadURL)
-      })
-      uialert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel) {
-        alert in
-      })
-
-      // self should be a UIViewController.
-      self.present(uialert, animated: true, completion: nil)
-    }
+    // checkForUpdate()
   }
 
   @objc func checkForUpdateButtonClicked() {
-      AppDistribution.appDistribution().checkForUpdate(completion: { [self] release, error in
-          var uiAlert: UIAlertController
-
-          if error != nil {
-              uiAlert = UIAlertController(title: "Error", message: "Error Checking for update! \(error?.localizedDescription ?? "")", preferredStyle: .alert)
-          } else if release == nil {
-              uiAlert = UIAlertController(title: "Check for Update", message: "No releases found!!", preferredStyle: .alert)
-              uiAlert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default))
-          } else {
-              guard let release = release else { return }
-
-              let title = "New Version Available"
-              let message = "Version \(release.displayVersion)(\(release.buildVersion)) is available."
-              uiAlert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-
-              uiAlert.addAction(UIAlertAction(title: "Update", style: UIAlertAction.Style.default) {
-                  _ in
-                  UIApplication.shared.open(release.downloadURL)
-              })
-              uiAlert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel) {
-                  _ in
-              })
-          }
-
-          self.present(uiAlert, animated: true, completion: nil)
-      })
+    checkForUpdate()
   }
 
-  @objc func signInOutButtonClicked() {
-      if isTesterSignedIn() {
-          AppDistribution.appDistribution().signOutTester()
+  // MARK: - Firebase 🔥
+  private func checkForUpdate() {
+    AppDistribution.appDistribution().checkForUpdate(completion: { [self] release, error in
+      var uiAlert: UIAlertController
 
-          self.configureCheckForUpdateButton()
-          self.configureSignInSignOutButton()
-          self.configureSignInStatus()
-
+      if error != nil {
+        uiAlert = UIAlertController(title: "Error", message: "Error Checking for update! \(error?.localizedDescription ?? "")", preferredStyle: .alert)
+      } else if release == nil {
+        uiAlert = UIAlertController(title: "Check for Update", message: "No releases found!!", preferredStyle: .alert)
+        uiAlert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default))
       } else {
-          AppDistribution.appDistribution().signInTester(completion: { error in
-              if error == nil {
-                  self.configureCheckForUpdateButton()
-                  self.configureSignInSignOutButton()
-                  self.configureSignInStatus()
-              } else {
-                  let uiAlert = UIAlertController(title: "Custom:Error", message: "Error during tester sign in! \(error?.localizedDescription ?? "")", preferredStyle: .alert)
-                  uiAlert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default) {
-                      _ in
-                  })
+        guard let release = release else { return }
 
-                  self.present(uiAlert, animated: true, completion: nil)
-              }
-          })
+        let title = "New Version Available"
+        let message = "Version \(release.displayVersion)(\(release.buildVersion)) is available."
+        uiAlert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+
+        uiAlert.addAction(UIAlertAction(title: "Update", style: UIAlertAction.Style.default) {
+          _ in
+          UIApplication.shared.open(release.downloadURL)
+        })
+        uiAlert.addAction(UIAlertAction(title: "Cancel", style: UIAlertAction.Style.cancel) {
+          _ in
+        })
       }
+      self.present(uiAlert, animated: true, completion: nil)
+    })
   }
 
   private func isTesterSignedIn() -> Bool {
     return AppDistribution.appDistribution().isTesterSignedIn
   }
 
+  @objc func signInOutButtonClicked() {
+    if isTesterSignedIn() {
+      AppDistribution.appDistribution().signOutTester()
+
+      self.configureCheckForUpdateButton()
+      self.configureSignInSignOutButton()
+      self.configureSignInStatus()
+
+    } else {
+      AppDistribution.appDistribution().signInTester(completion: { error in
+        if error == nil {
+          self.configureCheckForUpdateButton()
+          self.configureSignInSignOutButton()
+          self.configureSignInStatus()
+        } else {
+          let uiAlert = UIAlertController(title: "Custom:Error", message: "Error during tester sign in! \(error?.localizedDescription ?? "")", preferredStyle: .alert)
+          uiAlert.addAction(UIAlertAction(title: "Ok", style: UIAlertAction.Style.default) {
+            _ in
+          })
+
+          self.present(uiAlert, animated: true, completion: nil)
+        }
+      })
+    }
+  }
+
+
+
   // MARK: - Private Helpers
   private func configureCheckForUpdateButton() {
-      checkForUpdateButton!.backgroundColor = primaryButtonColor
-      checkForUpdateButton!.setTitle("Check for Update Manually", for: .normal)
-      checkForUpdateButton!.addTarget(self, action: #selector(checkForUpdateButtonClicked), for: .touchUpInside)
-      checkForUpdateButton!.isHidden = !isTesterSignedIn()
+    checkForUpdateButton!.backgroundColor = primaryButtonColor
+    checkForUpdateButton!.setTitle("Check for Update Manually", for: .normal)
+    checkForUpdateButton!.addTarget(self, action: #selector(checkForUpdateButtonClicked), for: .touchUpInside)
+    checkForUpdateButton!.isHidden = !isTesterSignedIn()
   }
 
   private func configureSignInSignOutButton() {
-      signInOutButton!.backgroundColor = isTesterSignedIn() ? secondaryButtonColor : primaryButtonColor
-      signInOutButton!.setTitleColor(.white, for: .normal)
-      let title = isTesterSignedIn() ? "Sign Out" : "Sign In"
-      signInOutButton!.setTitle(title, for: .normal)
-      signInOutButton!.setTitleColor(.white, for: .normal)
-      signInOutButton!.isHidden = false
+    signInOutButton!.backgroundColor = isTesterSignedIn() ? secondaryButtonColor : primaryButtonColor
+    signInOutButton!.setTitleColor(.white, for: .normal)
+    let title = isTesterSignedIn() ? "Sign Out" : "Sign In"
+    signInOutButton!.setTitle(title, for: .normal)
+    signInOutButton!.setTitleColor(.white, for: .normal)
+    signInOutButton!.isHidden = false
   }
 
   private func configureSignInStatus() {
-      signedInStatus!.textColor = isTesterSignedIn() ? .green : .orange
-      signedInStatus!.font = .boldSystemFont(ofSize: 20.0)
-      signedInStatus!.text = isTesterSignedIn() ? "Tester is signed in" : "Tester is signed out"
+    signedInStatus!.textColor = isTesterSignedIn() ? .green : .orange
+    signedInStatus!.font = .boldSystemFont(ofSize: 20.0)
+    signedInStatus!.text = isTesterSignedIn() ? "Tester is signed in" : "Tester is signed out"
   }
 
   private func configureNavigationBar() {
