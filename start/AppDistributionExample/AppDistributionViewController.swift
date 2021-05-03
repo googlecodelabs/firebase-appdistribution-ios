@@ -51,11 +51,14 @@ class AppDistributionViewController: UIViewController {
     view.addSubview(signedInStatus!)
   }
 
-  @objc func checkForUpdateButtonClicked() {
+  override func viewDidAppear(_ animated: Bool) {
   }
 
   // MARK: - Firebase 🔥
   private func checkForUpdate() {
+  }
+
+  @objc func checkForUpdateButtonClicked() {
   }
 
   @objc func signInOutButtonClicked() {
