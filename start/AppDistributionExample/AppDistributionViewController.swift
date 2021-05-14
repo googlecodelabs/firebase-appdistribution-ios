@@ -34,21 +34,21 @@ class AppDistributionViewController: UIViewController {
     currentVersion!.font = .systemFont(ofSize: 18.0)
     view.addSubview(currentVersion!)
     
-    // Show check for update button only if tester is signed in
-    checkForUpdateButton = UIButton(frame: CGRect(x: 50, y: 300, width: 300, height: 50))
-    configureCheckForUpdateButton()
-    view.addSubview(checkForUpdateButton!)
-
-    // Toggle sign in and sign out based on whether tester is signed in
-    signInOutButton = UIButton(frame: CGRect(x: 50, y: 400, width: 300, height: 50))
-    configureSignInSignOutButton()
-    signInOutButton!.addTarget(self, action: #selector(signInOutButtonClicked), for: .touchUpInside)
-    view.addSubview(signInOutButton!)
-    
-    // Toggle sign in status based on whether tester is signed in or nor
-    signedInStatus = UILabel(frame: CGRect(x: 120, y: 500, width: 400, height: 50))
-    configureSignInStatus()
-    view.addSubview(signedInStatus!)
+//    // Show check for update button only if tester is signed in
+//    checkForUpdateButton = UIButton(frame: CGRect(x: 50, y: 300, width: 300, height: 50))
+//    configureCheckForUpdateButton()
+//    view.addSubview(checkForUpdateButton!)
+//
+//    // Toggle sign in and sign out based on whether tester is signed in
+//    signInOutButton = UIButton(frame: CGRect(x: 50, y: 400, width: 300, height: 50))
+//    configureSignInSignOutButton()
+//    signInOutButton!.addTarget(self, action: #selector(signInOutButtonClicked), for: .touchUpInside)
+//    view.addSubview(signInOutButton!)
+//
+//    // Toggle sign in status based on whether tester is signed in or nor
+//    signedInStatus = UILabel(frame: CGRect(x: 120, y: 500, width: 400, height: 50))
+//    configureSignInStatus()
+//    view.addSubview(signedInStatus!)
   }
 
   override func viewDidAppear(_ animated: Bool) {
