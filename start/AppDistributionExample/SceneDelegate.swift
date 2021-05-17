@@ -23,12 +23,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     guard let windowScene = (scene as? UIWindowScene) else { return }
     appDistributionViewController = AppDistributionViewController()
     window = UIWindow(windowScene: windowScene)
-    window?
-      .rootViewController = UINavigationController(rootViewController: appDistributionViewController!)
+    window?.rootViewController =
+        UINavigationController(rootViewController: appDistributionViewController!)
     window?.makeKeyAndVisible()
   }
     
-    func sceneDidBecomeActive(_ scene: UIScene) {
-        appDistributionViewController?.sceneBecameActive()
-    }
+  func sceneDidBecomeActive(_ scene: UIScene) {
+    appDistributionViewController?.sceneBecameActive()
+  }
 }
