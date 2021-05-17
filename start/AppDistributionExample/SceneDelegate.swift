@@ -16,13 +16,19 @@ import UIKit
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
   var window: UIWindow?
+  var appDistributionViewController: AppDistributionViewController?
 
   func scene(_ scene: UIScene, willConnectTo session: UISceneSession,
              options connectionOptions: UIScene.ConnectionOptions) {
     guard let windowScene = (scene as? UIWindowScene) else { return }
+    appDistributionViewController = AppDistributionViewController()
     window = UIWindow(windowScene: windowScene)
     window?
-      .rootViewController = UINavigationController(rootViewController: AppDistributionViewController())
+      .rootViewController = UINavigationController(rootViewController: appDistributionViewController!)
     window?.makeKeyAndVisible()
   }
+    
+    func sceneDidBecomeActive(_ scene: UIScene) {
+        appDistributionViewController?.sceneBecameActive()
+    }
 }
