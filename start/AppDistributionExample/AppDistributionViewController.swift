@@ -54,6 +54,10 @@ class AppDistributionViewController: UIViewController {
   override func viewDidAppear(_ animated: Bool) {
   }
 
+  func sceneBecameActive() {
+    checkForUpdate()
+  }
+
   // MARK: - Firebase 🔥
   private func checkForUpdate() {
   }
